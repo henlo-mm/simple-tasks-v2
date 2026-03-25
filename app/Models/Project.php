@@ -23,7 +23,9 @@ class Project extends Model
 
     public function getTotalEstimatedHoursAttribute(): float
     {
-        return $this->tasks->sum('estimated_hours');
+        $taskHours = $this->tasks->sum('estimated_hours');
+        $subtaskHours = $this->tasks->flatMap->subtasks->sum('estimated_hours');
+        return $taskHours + $subtaskHours;
     }
 
     public function getCompletedTasksCountAttribute(): int
